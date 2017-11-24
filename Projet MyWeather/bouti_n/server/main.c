@@ -4,9 +4,8 @@ int 			main(int argc, char **argv)
 {
 	char 		*str_dprt;
     zsock_t 	*req;
-    zsock_t 	*publisher;
+    zsock_t 	*pub;
     t_dpt		*list;
-    int         i = 0;
     
     str_dprt = NULL;
     list = NULL;
@@ -23,36 +22,35 @@ int 			main(int argc, char **argv)
     }
     else
     {
-        publisher = zsock_new(ZMQ_PUB);
-        zsock_bind(publisher, "tcp://*:%s", argv[3]);
+        pub = zsock_new(ZMQ_PUB);
+        zsock_bind(pub, "tcp://*:%s", argv[3]);
         req = zsock_new(ZMQ_REQ);
         zsock_connect(req, "tcp://%s:%s", argv[1], argv[2]);
     }
 
-    if (!req || !publisher)
+    if (!req || !pub)
     {
-        my_putstr("Création du serveur impossible. Vérifier la valeur de vos paramètres.");
+        my_putstr("FATAL ERROR. IMPOSSIBLE TO INITIALIZE. VERIFY PARAMETERS\n");
         return (0);
     }
-    my_putstr("Serveur lancé\n");
+
+    my_putstr("Ready to go !\n");
     while (!zsys_interrupted) {
         zstr_sendf(req, "france");
-        my_putstr("Récupération des données...\n");
         str_dprt = zstr_recv(req);
         list = create_list(str_dprt);
+        my_putstr("New datas upcoming\n");
         while (list != NULL)
     	{
-            ++i;
-    		zstr_sendf(publisher, "%s", list->data);
+    		zstr_sendf(pub, "%s", list->data);
             list = list->next;
     	}
-        i = 0;
         zstr_free(&str_dprt);
         my_putstr("Sending updated datas to client\n");
     	sleep(5);
     }
     zsock_destroy(&req);
-    zsock_destroy(&publisher);
+    zsock_destroy(&pub);
     free(list);
     my_putstr("\nServeur hors ligne ! Au revoir ;)\n");
     return (0);
