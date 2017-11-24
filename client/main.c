@@ -2,7 +2,7 @@
 
 int 			main(int argc, char **argv)
 {
-    zsock_t 	*subscriber;
+    zsock_t 	*sub;
     char        *str_dprt;
 
     str_dprt = NULL;
@@ -13,22 +13,22 @@ int 			main(int argc, char **argv)
     }
     else
     {
-        subscriber = zsock_new(ZMQ_SUB);
-        zsock_connect(subscriber, "tcp://%s:%s", argv[1], argv[2]);
-        zsock_set_subscribe(subscriber, argv[3]);
+        sub = zsock_new(ZMQ_SUB);
+        zsock_connect(sub, "tcp://%s:%s", argv[1], argv[2]);
+        zsock_set_subscribe(sub, argv[3]);
     }
-    if (!subscriber)
+    if (!sub)
     {
-        my_putstr("Création du client impossible. Vérifier la valeur de vos paramètres.");
+        my_putstr("FATAL ERROR. IMPOSSIBLE TO INITIALIZE. VERIFY PARAMETERS\n");
         return (0);
     }
 
     while (!zsys_interrupted) {
-	    str_dprt = zstr_recv (subscriber);
+	    str_dprt = zstr_recv (sub);
     	show_details(str_dprt);
     	zstr_free(&str_dprt);
         sleep(5);
     }
-    zsock_destroy(&subscriber);
+    zsock_destroy(&sub);
     return (0);
 }

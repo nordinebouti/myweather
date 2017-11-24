@@ -29,12 +29,3 @@ t_dpt		*add_dpt(t_dpt *list, char *elmt)
     return (new_dprt);
 
 }
-
-void		free_list(t_dpt *list)
-{
-	list->data = NULL;
-	free(list->data = NULL);
-	if(list->next)
-		free_list(list->next);
-	free(list);
-}

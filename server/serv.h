@@ -21,6 +21,5 @@ char				*my_strdup(const char *str);
 int					my_putnbr(int nb);
 t_dpt				*create_list(char	*str_dprt);
 t_dpt				*add_dpt(t_dpt *list, char *elmt);
-void				free_list(t_dpt *list);
 
 #endif
