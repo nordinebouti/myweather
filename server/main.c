@@ -52,6 +52,6 @@ int 			main(int argc, char **argv)
     zsock_destroy(&req);
     zsock_destroy(&pub);
     free(list);
-    my_putstr("\nServeur hors ligne ! Au revoir ;)\n");
+    my_putstr("\nShuting down\n");
     return (0);
 }
